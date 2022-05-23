@@ -1,0 +1,24 @@
+{
+  "name": "punyblog",
+  "version": "0.0.1",
+  "description": "Render markdown files into a static website",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Kendall Anderson <kpander@invisiblethreads.com>",
+  "license": "MIT",
+  "keywords": [
+    "markdown",
+    "static"
+  ],
+  "dependencies": {
+    "front-matter": "^4.0.2",
+    "markdown-it": "^13.0.1",
+    "nunjucks": "^3.2.3"
+  },
+  "devDependencies": {
+    "jest": "^28.1.0",
+    "tmp": "^0.2.1"
+  }
+}
