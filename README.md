@@ -20,6 +20,26 @@ The rendered destination folder should be considered a self-contained static web
 
 There are many, many, many variations of static site generators (from Jekyll to Hugo to many others). This aims to be quick, simple and easy (and intended for my own use).
 
+The motivation is to be able to easily translate a simple structure of markdown files into a website.
+
+For example:
+
+```
+./src/index.md
+./src/about.md
+./src/articles/2022-05-01-first-thing.md
+./src/articles/2022-05-06-next-thing.md
+```
+
+... should simply become...
+
+```
+./dest/index.html
+./dest/about.html
+./dest/articles/2022-05-01-first-thing.html
+./dest/articles/2022-05-06-next-thing.html
+```
+
 
 ## Supports
 
