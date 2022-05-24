@@ -24,4 +24,23 @@ module.exports = class Util {
     return filelist;
   }
 
+  /**
+   * Given a folder, ensure the folder exists. If it doesn't already exist,
+   * create it. Account for multiple levels of depth.
+   *
+   * @param string folder name to create or verify that it exists
+   * @return boolean true if the folder exists, or was created
+   * @return boolean false if an invalid option was provided
+   */
+  static ensureFolder(folder = null) {
+    if (typeof folder !== "string") return false;
+    if (folder.trim() === "") return false;
+    if (!path.isAbsolute(folder)) return false;
+
+    if (fs.existsSync(folder)) return true;
+
+    fs.mkdirSync(folder, { recursive: true });
+    return true;
+  }
 };
+

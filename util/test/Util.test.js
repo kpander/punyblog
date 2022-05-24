@@ -1,5 +1,5 @@
 "use strict";
-/*global test, expect*/
+/*global describe, test, expect*/
 /**
  * @file
  * Util.test.js
@@ -18,8 +18,9 @@ const createTmpFile = function(filename) {
   fs.writeFileSync(filename, "test file", "utf8");
 };
 
-test(
-  `[Util.getfiles-001]
+describe("Util.getFiles:", () => {
+  test(
+    `[Util.getFiles-001]
   Given
     - no directory
   When
@@ -35,8 +36,8 @@ test(
   expect(files).toEqual(false);
 });
 
-test(
-  `[Util.getfiles-002]
+  test(
+    `[Util.getFiles-002]
   Given
     - the current folder
   When
@@ -59,8 +60,8 @@ test(
   });
 });
 
-test(
-  `[Util.getfiles-003]
+  test(
+    `[Util.getFiles-003]
   Given
     - a folder with multiple files
     - a folder with a subfolder, with files
@@ -93,5 +94,145 @@ test(
   expect(files[3].indexOf("b-file2.txt")).toBeGreaterThan(0);
   expect(files[2].indexOf("folder")).toBeGreaterThan(0);
   expect(files[3].indexOf("folder")).toBeGreaterThan(0);
+});
+});
+
+describe("Util.ensureFolder:", () => {
+  test(
+    `[Util.ensureFolder-001]
+  Given
+    - no argument
+  When
+    - we run ensureFolder()
+  Then
+    - we get an error (we require a string)
+`.trim(), async() => {
+  // Given...
+  // When...
+  const result = Util.ensureFolder();
+
+  // Then...
+  expect(result).toEqual(false);
+});
+
+  test(
+    `[Util.ensureFolder-002]
+  Given
+    - a non-string argument
+  When
+    - we run ensureFolder()
+  Then
+    - we get an error (we require a string)
+`.trim(), async() => {
+  // Given...
+  // When...
+  const result1 = Util.ensureFolder(123);
+  const result2 = Util.ensureFolder({ abc: "123" });
+
+  // Then...
+  expect(result1).toEqual(false);
+  expect(result2).toEqual(false);
+});
+
+  test(
+    `[Util.ensureFolder-003]
+  Given
+    - an empty string argument
+  When
+    - we run ensureFolder()
+  Then
+    - we get an error (we require a non-empty string)
+`.trim(), async() => {
+  // Given...
+  // When...
+  const result = Util.ensureFolder("");
+
+  // Then...
+  expect(result).toEqual(false);
+});
+
+  test(
+    `[Util.ensureFolder-004]
+  Given
+    - a relative path argument
+  When
+    - we run ensureFolder()
+  Then
+    - we get an error (we require an absolute path)
+`.trim(), async() => {
+  // Given...
+  // When...
+  const result = Util.ensureFolder("test-path");
+
+  // Then...
+  expect(result).toEqual(false);
+});
+
+  test(
+    `[Util.ensureFolder-005]
+  Given
+    - an absolute folder that already exists
+  When
+    - we run ensureFolder()
+  Then
+    - we receive true (because the folder already exists)
+`.trim(), async() => {
+  // Given...
+  const tmpobj = tmp.dirSync();
+  const folder = tmpobj.name;
+
+  // When...
+  const result = Util.ensureFolder(folder);
+
+  // Then...
+  expect(result).toEqual(true);
+});
+
+  test(
+    `[Util.ensureFolder-006]
+  Given
+    - an absolute path argument that doesn't exist yet
+  When
+    - we run ensureFolder()
+  Then
+    - we receive true (because the folder was created)
+`.trim(), async() => {
+  // Given...
+  const tmpobj = tmp.dirSync();
+  const folder = tmpobj.name;
+
+  // When...
+  const path_new = path.join(folder, "test-path");
+  expect(fs.existsSync(path_new)).toEqual(false);
+  const result = Util.ensureFolder(path_new);
+
+  // Then...
+  expect(result).toEqual(true);
+  expect(fs.existsSync(path_new)).toEqual(true);
+});
+
+  test(
+    `[Util.ensureFolder-007]
+  Given
+    - an absolute path argument with multiple levels that don't exist yet
+  When
+    - we run ensureFolder()
+  Then
+    - we receive true (because the folders were created)
+`.trim(), async() => {
+  // Given...
+  const tmpobj = tmp.dirSync();
+  const folder = tmpobj.name;
+
+  // When...
+  const path_new = path.join(folder, "test-path1", "test-path2", "test-path3");
+  expect(fs.existsSync(path_new)).toEqual(false);
+  const result = Util.ensureFolder(path_new);
+
+  // Then...
+  expect(result).toEqual(true);
+  expect(fs.existsSync(path_new)).toEqual(true);
+});
+
 });
 
