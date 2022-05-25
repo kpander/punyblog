@@ -5,9 +5,10 @@
  * RenderHtml.test.js
  */
 
+const RenderHtml = require("../lib/RenderHtml");
 const fs = require("fs");
 const path = require("path");
-const RenderHtml = require("../lib/RenderHtml");
+const tmp = require("tmp");
 
 test(
   `[RenderHtml-001]
@@ -20,7 +21,6 @@ test(
 `.trim(), async() => {
   // Given...
   const renderHtml = new RenderHtml();
-  const filename_partial = path.join(__dirname, "..", "partials", "default.template.html");
 
   // When...
   // ... find the content within <main> and ensure it's empty, as it is in the
@@ -137,3 +137,67 @@ var2: my var2 value
   expect(match[1].trim()).toEqual(`<h2>we have 'my var1 value' and 'my var2 value'</h2>`);
 });
 
+test(
+  `[RenderHtml-006]
+  Given
+    - a string with markdown markup
+    - a custom nunjucks template to override the default
+  When
+    - we run render()
+  Then
+    - the custom template (with the same name as the PunyBlog default) should be used and should override the default template when nunjucks renders the content
+`.trim(), async() => {
+  // Given...
+  // ... create a path with a custom partial file, the same name as the default.
+  const tmpobj = tmp.dirSync();
+  const path_partials = tmpobj.name;
+  const file_partial = path.join(path_partials, "punyblog.template.html");
+  fs.writeFileSync(file_partial, "my custom template", "utf8");
+
+  const config = {
+    paths_partials: [ path_partials ]
+  };
+  const renderHtml = new RenderHtml(config);
+  const markdown = "## my custom markdown";
+
+  // When...
+  const result = renderHtml.render(markdown).trim();
+
+  // Then...
+  expect(result).toEqual("my custom template");
+});
+
+test(
+  `[RenderHtml-007]
+  Given
+    - a string with markdown markup
+    - frontmatter that specifies a custom template
+    - a custom template file, specified in the frontmatter
+  When
+    - we run render()
+  Then
+    - the result should be the custom template
+`.trim(), async() => {
+  // Given...
+  // ... create a path with a custom partial file, the same name as the default.
+  const tmpobj = tmp.dirSync();
+  const path_partials = tmpobj.name;
+  const file_partial = path.join(path_partials, "custom-template.html");
+  fs.writeFileSync(file_partial, "my custom template", "utf8");
+
+  const config = {
+    paths_partials: [ path_partials ]
+  };
+  const renderHtml = new RenderHtml(config);
+  const markdown = `
+---
+template: custom-template.html
+---
+`.trim();
+
+  // When...
+  const result = renderHtml.render(markdown).trim();
+
+  // Then...
+  expect(result).toEqual("my custom template");
+});
