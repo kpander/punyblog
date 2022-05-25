@@ -5,6 +5,8 @@
  * RenderHtml.test.js
  */
 
+const fs = require("fs");
+const path = require("path");
 const RenderHtml = require("../lib/RenderHtml");
 
 test(
@@ -14,16 +16,22 @@ test(
   When
     - we run render()
   Then
-    - we receive an empty string
+    - we receive the default template partial, with no content inside <main>
 `.trim(), async() => {
   // Given...
   const renderHtml = new RenderHtml();
+  const filename_partial = path.join(__dirname, "..", "partials", "default.template.html");
 
   // When...
-  const result = renderHtml.render();
+  // ... find the content within <main> and ensure it's empty, as it is in the
+  // default template partial.
+  const result = renderHtml.render().trim();
+  const search = new RegExp(/<main>([\s\n]{0,})<\/main>/im);
+  const match = result.match(search);
 
   // Then...
-  expect(result).toEqual("");
+  expect(match.length).toEqual(2);
+  expect(match[1].trim()).toEqual("");
 });
 
 test(
@@ -33,7 +41,7 @@ test(
   When
     - we run render()
   Then
-    - we receive the string wrapped in <p> tags (standard markdown)
+    - the content inside the template's <main> tag is the string wrapped in <p> tags (standard markdown)
 `.trim(), async() => {
   // Given...
   const renderHtml = new RenderHtml();
@@ -41,9 +49,11 @@ test(
 
   // When...
   const result = renderHtml.render(string).trim();
+  const search = new RegExp(/<main>(.*)<\/main>/ims);
+  const match = result.match(search);
 
   // Then...
-  expect(result).toEqual(`<p>${string}</p>`);
+  expect(match[1].trim()).toEqual(`<p>${string}</p>`);
 });
 
 test(
@@ -53,7 +63,7 @@ test(
   When
     - we run render()
   Then
-    - we receive the string converted to expected HTML
+    - we receive the string converted to expected HTML (within the template <main> element)
 `.trim(), async() => {
   // Given...
   const renderHtml = new RenderHtml();
@@ -61,9 +71,11 @@ test(
 
   // When...
   const result = renderHtml.render(`## ${string}`).trim();
+  const search = new RegExp(/<main>(.*)<\/main>/ims);
+  const match = result.match(search);
 
   // Then...
-  expect(result).toEqual(`<h2>${string}</h2>`);
+  expect(match[1].trim()).toEqual(`<h2>${string}</h2>`);
 });
 
 test(
@@ -73,7 +85,7 @@ test(
   When
     - we run render()
   Then
-    - we receive the markdown content converted to expected HTML
+    - we receive the markdown content converted to expected HTML, within the <main> element of the template
 `.trim(), async() => {
   // Given...
   const renderHtml = new RenderHtml();
@@ -89,9 +101,11 @@ ghi: jkl
 
   // When...
   const result = renderHtml.render(markdown).trim();
+  const search = new RegExp(/<main>(.*)<\/main>/ims);
+  const match = result.match(search);
 
   // Then...
-  expect(result).toEqual(`<h2>${string}</h2>`);
+  expect(match[1].trim()).toEqual(`<h2>${string}</h2>`);
 });
 
 test(
@@ -116,9 +130,10 @@ var2: my var2 value
 
   // When...
   const result = renderHtml.render(markdown).trim();
+  const search = new RegExp(/<main>(.*)<\/main>/ims);
+  const match = result.match(search);
 
   // Then...
-  expect(result).toEqual(`<h2>we have 'my var1 value' and 'my var2 value'</h2>`);
+  expect(match[1].trim()).toEqual(`<h2>we have 'my var1 value' and 'my var2 value'</h2>`);
 });
-
 
