@@ -63,7 +63,7 @@ test(
 test(
   `[PunyBlog-003]
   Given
-    - a configuration option where the src path exists
+    - a configuration option where the src path exists (without any files)
     - a configuration option where the dist path doesn't exist
   When
     - we build
@@ -72,12 +72,14 @@ test(
     - the dist path should have been created
 `.trim(), async() => {
   // Given...
-  const tmpobj = tmp.dirSync();
-  const path_dest = tmpobj.name;
+  const tmpobj1 = tmp.dirSync();
+  const tmpobj2 = tmp.dirSync();
+  const path_src = tmpobj1.name;
+  const path_dest = tmpobj2.name;
   fs.rmdirSync(path_dest);
 
   const config = {
-    path_src: path.dirname(__dirname),
+    path_src: path_src,
     path_dest: path_dest,
   };
   const punyBlog = new PunyBlog(config);
@@ -168,5 +170,4 @@ test(
     expect(fs.existsSync(filename)).toEqual(true);
   });
 });
-
 

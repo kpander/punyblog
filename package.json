@@ -6,6 +6,11 @@
   "scripts": {
     "test": "jest"
   },
+  "files": [
+    "lib/PunyBlog.js",
+    "lib/RenderHtml.js",
+    "partials/default.template.html"
+  ],
   "author": "Kendall Anderson <kpander@invisiblethreads.com>",
   "license": "MIT",
   "keywords": [
