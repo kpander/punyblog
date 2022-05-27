@@ -201,3 +201,76 @@ template: custom-template.html
   // Then...
   expect(result).toEqual("my custom template");
 });
+
+test(
+  `[RenderHtml-008]
+  Given
+    - a string with markdown markup
+    - frontmatter that specifies a custom template
+    - the template file doesn't exist
+  When
+    - we run render()
+  Then
+    - we should throw an error
+`.trim(), async() => {
+  // Given...
+  const renderHtml = new RenderHtml();
+  const markdown = `
+---
+template: missing-file.html
+---
+`.trim();
+
+  // When...
+  let error = false;
+  try {
+    renderHtml.render(markdown).trim();
+  } catch (err) {
+    error = err;
+  }
+
+  // Then...
+  expect(error).not.toEqual(false);
+});
+
+test(
+  `[RenderHtml-009]
+  Given
+    - a string with markdown markup, that includes a nunjucks template
+  When
+    - we run render()
+  Then
+    - the result should contain the content of the custom nunjucks template file
+    - the result should not wrap the {% include %} in <p> via markdown
+    - the partial content should be correctly positioned
+`.trim(), async() => {
+  // Given...
+  // ... create a path with a custom partial file
+  const tmpobj = tmp.dirSync();
+  const path_partials = tmpobj.name;
+  const file_partial = path.join(path_partials, "custom-partial.html");
+  fs.writeFileSync(file_partial, "<div>my custom partial</div>", "utf8");
+
+  const config = {
+    paths_partials: [ path_partials ]
+  };
+  const renderHtml = new RenderHtml(config);
+  const markdown = `
+# header 1
+
+{% include "custom-partial.html" %}
+
+## header 2
+`.trim();
+
+  // When...
+  const result = renderHtml.render(markdown).trim();
+  const regex = new RegExp(/header 1.*my custom partial.*header 2/is);
+  const match = result.match(regex);
+
+  // Then...
+  expect(result.indexOf("<div>my custom partial")).toBeGreaterThan(-1);
+  expect(result.indexOf("<p><div>my custom partial")).toEqual(-1);
+  expect(match).not.toEqual(null);
+});
+
