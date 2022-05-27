@@ -236,3 +236,49 @@ describe("Util.ensureFolder:", () => {
 
 });
 
+describe("Util.replaceAll:", () => {
+  test(
+    `[Util.replaceAll-001]
+  Given
+    - a string, a search term, a replace term
+  When
+    - we run replaceAll()
+  Then
+    - we get the string with [search] replaced by [replace]
+`.trim(), async() => {
+  // Given...
+  const str = "this is my search string";
+  const search = "search";
+  const replace = "replace";
+  const expected = "this is my replace string";
+
+  // When...
+  const result = Util.replaceAll(str, search, replace);
+
+  // Then...
+  expect(result).toEqual(expected);
+});
+
+  test(
+    `[Util.replaceAll-001]
+  Given
+    - a string with multiple instances of a search term, a search term, a replace term
+  When
+    - we run replaceAll()
+  Then
+    - we get the string with all [search] replaced by [replace]
+`.trim(), async() => {
+  // Given...
+  const str = "this is my search string with search and search";
+  const search = "search";
+  const replace = "replace";
+  const expected = "this is my replace string with replace and replace";
+
+  // When...
+  const result = Util.replaceAll(str, search, replace);
+
+  // Then...
+  expect(result).toEqual(expected);
+});
+
+});

@@ -42,5 +42,13 @@ module.exports = class Util {
     fs.mkdirSync(folder, { recursive: true });
     return true;
   }
+
+  /**
+   * Replace all instances of [search] with [replace] in string.
+   */
+  static replaceAll(string, search, replace) {
+    return string.split(search).join(replace);
+  }
+
 };
 
