@@ -155,7 +155,7 @@ test(
   fs.writeFileSync(file_partial, "my custom template", "utf8");
 
   const config = {
-    paths_partials: [ path_partials ]
+    path_partials: [ path_partials ]
   };
   const renderHtml = new RenderHtml(config);
   const markdown = "## my custom markdown";
@@ -186,7 +186,7 @@ test(
   fs.writeFileSync(file_partial, "my custom template", "utf8");
 
   const config = {
-    paths_partials: [ path_partials ]
+    path_partials: [ path_partials ]
   };
   const renderHtml = new RenderHtml(config);
   const markdown = `
@@ -252,7 +252,7 @@ test(
   fs.writeFileSync(file_partial, "<div>my custom partial</div>", "utf8");
 
   const config = {
-    paths_partials: [ path_partials ]
+    path_partials: [ path_partials ]
   };
   const renderHtml = new RenderHtml(config);
   const markdown = `
