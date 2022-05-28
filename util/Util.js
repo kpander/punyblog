@@ -58,5 +58,22 @@ module.exports = class Util {
   static hasProp(obj = {}, key = "") {
     return Object.prototype.hasOwnProperty.call(obj, key);
   }
+
+  /**
+   * Create a file. If the containing folder doesn't exist, create it.
+   *
+   * @param string filename = filename to create
+   * @param string content = content to put in the new file
+   */
+  static touch(filename, content = "") {
+    if (typeof filename !== "string") return false;
+    if (typeof content !== "string") return false;
+
+    Util.ensureFolder(path.dirname(filename));
+
+    fs.writeFileSync(filename, content, "utf8");
+    return true;
+  }
+
 };
 

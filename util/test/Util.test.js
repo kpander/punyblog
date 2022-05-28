@@ -328,7 +328,50 @@ describe("Util.hasProp:", () => {
   expect(result3).toEqual(false);
 });
 
+});
 
+describe("Util.touch:", () => {
+  test(
+    `[Util.touch-001]
+  Given
+    - no filename
+  When
+    - we run touch()
+  Then
+    - we return false
+`.trim(), async() => {
+  // Given...
+  // When...
+  const result = Util.touch();
+
+  // Then...
+  expect(result).toEqual(false);
+});
+
+  test(
+    `[Util.touch-002]
+  Given
+    - a filename and no content
+  When
+    - we run touch()
+  Then
+    - we return true
+    - an empty file is created
+`.trim(), async() => {
+  // Given...
+  const tmpobj = tmp.dirSync();
+  const folder = tmpobj.name;
+  const filename = path.join(folder, "myfile.txt");
+
+  // When...
+  const result = Util.touch(filename);
+  const content = fs.readFileSync(filename, "utf8").trim();
+
+  // Then...
+  expect(result).toEqual(true);
+  expect(fs.existsSync(filename)).toEqual(true);
+  expect(content).toEqual("");
+});
 
 });
 
