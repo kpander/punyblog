@@ -274,3 +274,34 @@ test(
   expect(match).not.toEqual(null);
 });
 
+test(
+  `[RenderHtml-010]
+  Given
+    - a string with markdown markup
+    - a custom nunjucks template to override the default
+  When
+    - we run render() and provide path_partials as a string, instead of an array
+  Then
+    - the custom template (with the same name as the PunyBlog default) should be used and should override the default template when nunjucks renders the content
+`.trim(), async() => {
+  // Given...
+  // ... create a path with a custom partial file, the same name as the default.
+  const tmpobj = tmp.dirSync();
+  const path_partials = tmpobj.name;
+  const file_partial = path.join(path_partials, "punyblog.template.html");
+  fs.writeFileSync(file_partial, "my custom template", "utf8");
+
+  const config = {
+    path_partials: path_partials
+  };
+  const renderHtml = new RenderHtml(config);
+  const markdown = "## my custom markdown";
+
+  // When...
+  const result = renderHtml.toHtml(markdown).trim();
+
+  // Then...
+  expect(result).toEqual("my custom template");
+});
+
+
