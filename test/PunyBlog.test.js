@@ -1,11 +1,12 @@
 "use strict";
-/*global test, expect*/
+/*global describe, test, expect*/
 /**
  * @file
  * PunyBlog.test.js
  */
 
 const PunyBlog = require("../lib/PunyBlog");
+const Util = require("../util/Util");
 const fs = require("fs");
 const path = require("path");
 const tmp = require("tmp");
@@ -19,6 +20,7 @@ const createMarkdownFile = function(path_for_file, basename, contents) {
   return filename;
 };
 
+describe("Basic usage:", () => {
 test(
   `[PunyBlog-001]
   Given
@@ -169,5 +171,43 @@ test(
   expected_files.forEach(filename => {
     expect(fs.existsSync(filename)).toEqual(true);
   });
+});
+});
+
+describe("Static files:", () => {
+test(
+  `[Static-001]
+  Given
+    - a src folder that has non-markdown files, also in subfolders
+  When
+    - we build
+  Then
+    - the non-markdown files should be copied to the dest folder
+`.trim(), async() => {
+  // Given...
+  const tmpobj1 = tmp.dirSync();
+  const tmpobj2 = tmp.dirSync();
+  const path_src = tmpobj1.name;
+  const path_dest = tmpobj2.name;
+
+  const config = {
+    path_src: path_src,
+    path_dest: path_dest,
+  };
+
+  Util.touch(path.join(path_src, "file1.css"));
+  Util.touch(path.join(path_src, "css/file2.css"));
+
+  const punyBlog = new PunyBlog(config);
+
+  // When...
+  const result = punyBlog.build();
+
+  // Then...
+  expect(result).toEqual(true);
+  expect(fs.existsSync(path.join(path_dest, "file1.css"))).toEqual(true);
+  expect(fs.existsSync(path.join(path_dest, "css/file2.css"))).toEqual(true);
+});
+
 });
 
