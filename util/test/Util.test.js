@@ -282,3 +282,53 @@ describe("Util.replaceAll:", () => {
 });
 
 });
+
+
+describe("Util.hasProp:", () => {
+  test(
+    `[Util.hasProp-001]
+  Given
+    - no object or key
+  When
+    - we run hasProp()
+  Then
+    - we return false
+`.trim(), async() => {
+  // Given...
+  // When...
+  const result = Util.hasProp();
+
+  // Then...
+  expect(result).toEqual(false);
+});
+
+  test(
+    `[Util.hasProp-002]
+  Given
+    - an object and some valid and invalid keys
+  When
+    - we run hasProp()
+  Then
+    - we return true if the object has the key
+`.trim(), async() => {
+  // Given...
+  const obj = {
+    key1: "abc",
+    "key2": "def",
+  };
+
+  // When...
+  const result1 = Util.hasProp(obj, "key1");
+  const result2 = Util.hasProp(obj, "key2");
+  const result3 = Util.hasProp(obj, "key3");
+
+  // Then...
+  expect(result1).toEqual(true);
+  expect(result2).toEqual(true);
+  expect(result3).toEqual(false);
+});
+
+
+
+});
+

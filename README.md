@@ -126,14 +126,16 @@ e.g.,:
 ```js
 const PunyBlog = require("PunyBlog");
 
-const punyBlog = new PunyBlog({
+const blog = new PunyBlog({
   path_src: "/path/to/src",
   path_dest: "/path/to/dest",
   path_partials: [
-    "/path/to/partials1",
-    "/path/to/partials2",
+    "/path/to/partials",
+    "/path/to/more/partials",
   ],
 });
+
+blog.build();
 ```
 
 

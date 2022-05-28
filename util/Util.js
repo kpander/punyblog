@@ -50,5 +50,13 @@ module.exports = class Util {
     return string.split(search).join(replace);
   }
 
+  /**
+   * Does the given object have the given key?
+   *
+   * @return boolean
+   */
+  static hasProp(obj = {}, key = "") {
+    return Object.prototype.hasOwnProperty.call(obj, key);
+  }
 };
 

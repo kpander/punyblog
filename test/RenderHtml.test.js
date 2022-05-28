@@ -25,7 +25,7 @@ test(
   // When...
   // ... find the content within <main> and ensure it's empty, as it is in the
   // default template partial.
-  const result = renderHtml.render().trim();
+  const result = renderHtml.toHtml().trim();
   const search = new RegExp(/<main>([\s\n]{0,})<\/main>/im);
   const match = result.match(search);
 
@@ -48,7 +48,7 @@ test(
   const string = "my test string";
 
   // When...
-  const result = renderHtml.render(string).trim();
+  const result = renderHtml.toHtml(string).trim();
   const search = new RegExp(/<main>(.*)<\/main>/ims);
   const match = result.match(search);
 
@@ -70,7 +70,7 @@ test(
   const string = "my test string";
 
   // When...
-  const result = renderHtml.render(`## ${string}`).trim();
+  const result = renderHtml.toHtml(`## ${string}`).trim();
   const search = new RegExp(/<main>(.*)<\/main>/ims);
   const match = result.match(search);
 
@@ -100,7 +100,7 @@ ghi: jkl
 `.trim();
 
   // When...
-  const result = renderHtml.render(markdown).trim();
+  const result = renderHtml.toHtml(markdown).trim();
   const search = new RegExp(/<main>(.*)<\/main>/ims);
   const match = result.match(search);
 
@@ -129,7 +129,7 @@ var2: my var2 value
 `.trim();
 
   // When...
-  const result = renderHtml.render(markdown).trim();
+  const result = renderHtml.toHtml(markdown).trim();
   const search = new RegExp(/<main>(.*)<\/main>/ims);
   const match = result.match(search);
 
@@ -161,7 +161,7 @@ test(
   const markdown = "## my custom markdown";
 
   // When...
-  const result = renderHtml.render(markdown).trim();
+  const result = renderHtml.toHtml(markdown).trim();
 
   // Then...
   expect(result).toEqual("my custom template");
@@ -196,7 +196,7 @@ template: custom-template.html
 `.trim();
 
   // When...
-  const result = renderHtml.render(markdown).trim();
+  const result = renderHtml.toHtml(markdown).trim();
 
   // Then...
   expect(result).toEqual("my custom template");
@@ -224,7 +224,7 @@ template: missing-file.html
   // When...
   let error = false;
   try {
-    renderHtml.render(markdown).trim();
+    renderHtml.toHtml(markdown).trim();
   } catch (err) {
     error = err;
   }
@@ -264,7 +264,7 @@ test(
 `.trim();
 
   // When...
-  const result = renderHtml.render(markdown).trim();
+  const result = renderHtml.toHtml(markdown).trim();
   const regex = new RegExp(/header 1.*my custom partial.*header 2/is);
   const match = result.match(regex);
 
