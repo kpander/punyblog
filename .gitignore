@@ -14,3 +14,7 @@ npm-debug.log
 
 # jest test coverage report
 coverage
+
+# error logs
+combined.log
+error.log
