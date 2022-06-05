@@ -4,6 +4,8 @@ Tiny npm package to render a folder of markdown files into HTML.
 
 Intended to be included in node projects as a dependency, as the renderer.
 
+Think of it as a small, opinionated HTML build system.
+
 
 ## Purpose
 
@@ -13,7 +15,7 @@ Take a source folder of markdown files and static assets:
   - use templates for common page structures
   - copy static assets to a dist folder
 
-The rendered destination folder should be considered a self-contained static website.
+The rendered destination folder is a self-contained static website.
 
 
 ### Why another static site generator?
@@ -29,6 +31,8 @@ For example:
 ./src/about.md
 ./src/articles/2022-05-01-first-thing.md
 ./src/articles/2022-05-06-next-thing.md
+./src/css/styles.css
+./src/images/something.jpg
 ```
 
 ... should simply become...
@@ -38,6 +42,8 @@ For example:
 ./dest/about.html
 ./dest/articles/2022-05-01-first-thing.html
 ./dest/articles/2022-05-06-next-thing.html
+./dest/css/styles.css
+./dest/images/something.jpg
 ```
 
 
@@ -47,14 +53,31 @@ For example:
 - frontmatter in markdown files (which are available in templates as nunjucks variables)
 
 
-## Getting started
+## Installation
 
-### Requirements
+### 1. Create `.npmrc` file
 
-### Installation
+Ensure your project has a `.npmrc` file in the project root, containing the following line:
+
+```
+@kpander:registry=https://npm.pkg.github.com/
+```
+
+This tells `npm` to look to Github when installing the package. (Necessary because the package isn't published to the npm registry. It's published to the Github registry.)
 
 
-## Markdown files
+### 2. Install the package
+
+Assuming you already have a `package.json` file for your project:
+
+```bash
+$ npm install --save @kpander/punyblog
+```
+
+
+
+
+## Markdown files and frontmatter
 
 All frontmatter in a markdown file is converted to a variable that can be used in the template.
 
@@ -141,4 +164,6 @@ blog.build();
 
 
 ## Maintainers
+
+  - Kendall Anderson (kpander@invisiblethreads.com)
 
