@@ -489,5 +489,94 @@ test(
   expect(match).not.toEqual(null);
 });
 
+test(
+  `[Elements-004]
+  Given
+    - markup with a audio reference file that exists
+  When
+    - we build
+  Then
+    - the markup's audio reference should include the timestamp
+`.trim(), async() => {
+  // Given...
+  const tmpobj = tmp.dirSync();
+  const path_tmp = tmpobj.name;
+  touch(path_tmp, "myfile.ogg");
+
+  const html = `
+<audio src="myfile.ogg"/>
+`;
+  const cachebust = new Cachebust({ path: path_tmp });
+
+  // When...
+  const result = cachebust.build(html);
+  const regex = new RegExp(/src="myfile.ogg\?ts=[0-9]+"/);
+  const match = result.match(regex);
+
+  // Then...
+  expect(match).not.toEqual(null);
+});
+
+test(
+  `[Elements-005]
+  Given
+    - markup with a track reference file that exists
+  When
+    - we build
+  Then
+    - the markup's track reference should include the timestamp
+`.trim(), async() => {
+  // Given...
+  const tmpobj = tmp.dirSync();
+  const path_tmp = tmpobj.name;
+  touch(path_tmp, "myfile.vtt");
+
+  const html = `
+<video>
+<track src="myfile.vtt"/>
+</video>
+`;
+  const cachebust = new Cachebust({ path: path_tmp });
+
+  // When...
+  const result = cachebust.build(html);
+  const regex = new RegExp(/src="myfile.vtt\?ts=[0-9]+"/);
+  const match = result.match(regex);
+
+  // Then...
+  expect(match).not.toEqual(null);
+});
+
+test(
+  `[Elements-006]
+  Given
+    - markup with a video reference file that exists
+  When
+    - we build
+  Then
+    - the markup's video reference should include the timestamp
+`.trim(), async() => {
+  // Given...
+  const tmpobj = tmp.dirSync();
+  const path_tmp = tmpobj.name;
+  touch(path_tmp, "myfile.mov");
+
+  const html = `
+<video src="myfile.mov"/>
+`;
+  const cachebust = new Cachebust({ path: path_tmp });
+
+  // When...
+  const result = cachebust.build(html);
+  const regex = new RegExp(/src="myfile.mov\?ts=[0-9]+"/);
+  const match = result.match(regex);
+
+  // Then...
+  expect(match).not.toEqual(null);
+});
+
+
+
+
 });
 
