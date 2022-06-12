@@ -1,11 +1,15 @@
 {
   "name": "@kpander/punyblog",
   "description": "Render markdown files into a static website",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "homepage": "https://github.com/kpander/punyblog",
   "author": {
     "name": "Kendall Anderson",
     "email": "<kpander@invisiblethreads.com>"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=7.0.0"
   },
   "repository": {
     "type": "git",
@@ -18,7 +22,6 @@
   "files": [
     "lib/PunyBlog.js",
     "lib/RenderHtml.js",
-    "util/Util.js",
     "util/Log.js",
     "partials/default.template.html"
   ],
@@ -31,6 +34,7 @@
     "static"
   ],
   "dependencies": {
+    "@kpander/nodejs-util": "^1.0.0",
     "front-matter": "^4.0.2",
     "markdown-it": "^13.0.1",
     "nunjucks": "^3.2.3",

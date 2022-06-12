@@ -65,6 +65,8 @@ Ensure your project has a `.npmrc` file in the project root, containing the foll
 
 This tells `npm` to look to Github when installing the package. (Necessary because the package isn't published to the npm registry. It's published to the Github registry.)
 
+Also be sure to include your Github access token, or else the installation will be denied and fail.
+
 
 ### 2. Install the package
 
