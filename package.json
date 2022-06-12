@@ -22,7 +22,6 @@
   "files": [
     "lib/PunyBlog.js",
     "lib/RenderHtml.js",
-    "util/Util.js",
     "util/Log.js",
     "partials/default.template.html"
   ],
