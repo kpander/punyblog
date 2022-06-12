@@ -7,6 +7,10 @@
     "name": "Kendall Anderson",
     "email": "<kpander@invisiblethreads.com>"
   },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=7.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:kpander/punyblog.git"
@@ -31,6 +35,7 @@
     "static"
   ],
   "dependencies": {
+    "@kpander/nodejs-util": "^1.0.0",
     "front-matter": "^4.0.2",
     "markdown-it": "^13.0.1",
     "nunjucks": "^3.2.3",

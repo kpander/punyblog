@@ -6,7 +6,7 @@
  */
 
 const PunyBlog = require("../lib/PunyBlog");
-const Util = require("../util/Util");
+const Util = require("@kpander/nodejs-util");
 const fs = require("fs");
 const path = require("path");
 const tmp = require("tmp");
