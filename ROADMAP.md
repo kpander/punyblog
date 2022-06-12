@@ -10,7 +10,9 @@ To make site building easier:
     - automatically rewrite scss references to css
     - automatically compile scss into css
   - automatic cache busting
-    - add a url timestamp argument to static files
-    - timestamp should reflect last modified date of the source file
-    - should affect all static files we can easily catch
-      - css, js, images, fonts
+    - [done] add a url timestamp argument to static files
+    - [done] timestamp should reflect last modified date of the source file
+    - [done] should affect all static files we can easily catch
+    - multiple modes
+      - html (cachebust a string of html)
+      - css (cachebust a string of css)
