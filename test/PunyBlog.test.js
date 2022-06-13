@@ -211,3 +211,84 @@ test(
 
 });
 
+describe("Cachebusting:", () => {
+test(
+  `[Cachebust-001]
+  Given
+    - a src folder with a markdown file referencing a static image file that exists
+  When
+    - we build
+  Then
+    - the HTML reference to the image has a cachebusting timestamp
+`.trim(), async() => {
+  // Given...
+  const tmpobj1 = tmp.dirSync();
+  const tmpobj2 = tmp.dirSync();
+  const path_src = tmpobj1.name;
+  const path_dest = tmpobj2.name;
+
+  const config = {
+    path_src: path_src,
+    path_dest: path_dest,
+  };
+
+  Util.touch(path.join(path_src, "images/image.jpg"));
+  createMarkdownFile(path_src, "myfile.md", `<img src="images/image.jpg">`);
+
+  const punyBlog = new PunyBlog(config);
+
+  // When...
+  const result = punyBlog.build();
+
+  // Then...
+  expect(result).toEqual(true);
+  expect(fs.existsSync(path.join(path_dest, "myfile.html"))).toEqual(true);
+
+  // ... confirm the html image reference has a valid timestamp parameter
+  const content = fs.readFileSync(path.join(path_dest, "myfile.html"), "utf8");
+  const regex = new RegExp(/src="images\/image.jpg\?ts=[0-9]+"/i);
+  const matches = content.match(regex);
+  expect(matches).not.toEqual(null);
+});
+
+test(
+  `[Cachebust-002]
+  Given
+    - a src folder with a markdown file referencing a static image file that doesn't exist
+  When
+    - we build
+  Then
+    - the HTML reference to the image has a cachebusting timestamp indicating a missing file
+`.trim(), async() => {
+  // Given...
+  const tmpobj1 = tmp.dirSync();
+  const tmpobj2 = tmp.dirSync();
+  const path_src = tmpobj1.name;
+  const path_dest = tmpobj2.name;
+
+  const config = {
+    path_src: path_src,
+    path_dest: path_dest,
+  };
+
+  createMarkdownFile(path_src, "myfile.md", `<img src="images/image.jpg">`);
+
+  const punyBlog = new PunyBlog(config);
+
+  // When...
+  const result = punyBlog.build();
+
+  // Then...
+  expect(result).toEqual(true);
+  expect(fs.existsSync(path.join(path_dest, "myfile.html"))).toEqual(true);
+
+  // ... confirm the html image reference has a timestamp parameter indicating
+  // the file doesn't exist (i.e., the '-m' suffix).
+  const content = fs.readFileSync(path.join(path_dest, "myfile.html"), "utf8");
+  const regex = new RegExp(/src="images\/image.jpg\?ts=[0-9]+-m"/i);
+  const matches = content.match(regex);
+  expect(matches).not.toEqual(null);
+});
+
+});
+

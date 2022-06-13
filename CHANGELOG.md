@@ -1,5 +1,8 @@
 # PunyBlog changelog
 
+  - v1.1.0 (2022-06-13)
+    - Feature: Adds cachebusting to static filename references
+
   - v1.0.1 (2022-06-12)
     - Refactor: Switches common Util code to external Util package
 
