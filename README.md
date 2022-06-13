@@ -163,6 +163,13 @@ const blog = new PunyBlog({
 blog.build();
 ```
 
+## Features
+
+### Cachebusting
+
+Static filenames referenced in the final HTML will have a query parameter added, with the last modified timestamp for the file. This has the effect of being a 'cache buster' when files are modified, but the filename remains the same.
+
+This is provided by the [Cachebust](https://github.com/kpander/cachebust) package.
 
 
 ## Maintainers
