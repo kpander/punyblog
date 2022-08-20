@@ -1,5 +1,8 @@
 # PunyBlog changelog
 
+  - v1.1.1 (2022-08-20)
+    - Bugfix: Added error checking to ensure we provide absolute paths to PunyBlog.build()
+
   - v1.1.0 (2022-06-13)
     - Feature: Adds cachebusting to static filename references
 
