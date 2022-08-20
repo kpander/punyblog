@@ -209,6 +209,41 @@ test(
   expect(fs.existsSync(path.join(path_dest, "css/file2.css"))).toEqual(true);
 });
 
+test(
+  `[Static-002]
+  Given
+    - a src folder that has non-markdown files, also in subfolders
+  When
+    - we build but provide a relative src or dest path
+  Then
+    - build should fail
+`.trim(), async() => {
+  // Given...
+  const tmpobj = tmp.dirSync();
+  const path_tmp = tmpobj.name;
+
+  const config1 = {
+    path_src: path_tmp,
+    path_dest: "some-relative-path",
+  };
+  const config2 = {
+    path_src: "some-relative-path",
+    path_dest: path_tmp,
+  };
+
+  const punyBlog1 = new PunyBlog(config1);
+  const punyBlog2 = new PunyBlog(config2);
+
+  // When...
+  const result1 = punyBlog1.build();
+  const result2 = punyBlog2.build();
+
+  // Then...
+  expect(result1).toEqual(false);
+  expect(result2).toEqual(false);
+});
+
+
 });
 
 describe("Cachebusting:", () => {
