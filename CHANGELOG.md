@@ -1,5 +1,9 @@
 # PunyBlog changelog
 
+  - v1.2.0 (2023-05-13)
+    - Feature: Adds cachebusting to CSS `@import` rules inside CSS files
+    - Maintenance: `npm audit fix` for dependabot warnings
+
   - v1.1.1 (2022-08-20)
     - Bugfix: Added error checking to ensure we provide absolute paths to PunyBlog.build()
 
