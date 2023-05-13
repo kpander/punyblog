@@ -21,6 +21,7 @@ const createMarkdownFile = function(path_for_file, basename, contents) {
 };
 
 describe("Basic usage:", () => {
+
 test(
   `[PunyBlog-001]
   Given
@@ -175,6 +176,7 @@ test(
 });
 
 describe("Static files:", () => {
+
 test(
   `[Static-001]
   Given
@@ -247,6 +249,7 @@ test(
 });
 
 describe("Cachebusting:", () => {
+
 test(
   `[Cachebust-001]
   Given
@@ -324,6 +327,52 @@ test(
   const matches = content.match(regex);
   expect(matches).not.toEqual(null);
 });
+
+test(
+  `[Cachebust-003]
+  Given
+    - a src folder with a markdown file referencing a css file
+    - the css file imports another css file via @import
+  When
+    - we build
+  Then
+    - the rendered first file referening the second css file should have a timestamp
+`.trim(), async() => {
+  // Given...
+  const tmpobj1 = tmp.dirSync();
+  const tmpobj2 = tmp.dirSync();
+  const path_src = tmpobj1.name;
+  const path_dest = tmpobj2.name;
+
+  const config = {
+    path_src: path_src,
+    path_dest: path_dest,
+  };
+
+  // Create the src style.css file with a reference to a second css file.
+  const file_css = path.join(path_src, "style.css");
+  fs.writeFileSync(file_css, '/* css */ @import "second.css"; ', "utf8");
+
+  createMarkdownFile(path_src, "myfile.md", `<link rel="stylesheet" type="text/css" href="style.css">`);
+  Util.touch(path.join(path_src, "second.css"));
+
+  const punyBlog = new PunyBlog(config);
+
+  // When...
+  const result = punyBlog.build();
+
+  // Then...
+  expect(result).toEqual(true);
+  expect(fs.existsSync(path.join(path_dest, "style.css"))).toEqual(true);
+
+  // ... confirm the css file referenced in the @import rule inside the css
+  // file has a timestamp parameter indicating the file does exist.
+  const content = fs.readFileSync(path.join(path_dest, "style.css"), "utf8");
+  const regex = new RegExp(/second.css\?ts=[0-9]+"/i);
+  const matches = content.match(regex);
+  expect(matches).not.toEqual(null);
+});
+
 
 });
 
