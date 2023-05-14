@@ -351,7 +351,10 @@ test(
 
   // Create the src style.css file with a reference to a second css file.
   const file_css = path.join(path_src, "style.css");
-  fs.writeFileSync(file_css, '/* css */ @import "second.css"; ', "utf8");
+  fs.writeFileSync(file_css, `
+// css
+@import "second.css";
+`, "utf8");
 
   createMarkdownFile(path_src, "myfile.md", `<link rel="stylesheet" type="text/css" href="style.css">`);
   Util.touch(path.join(path_src, "second.css"));
@@ -373,6 +376,118 @@ test(
   expect(matches).not.toEqual(null);
 });
 
+test(
+  `[Cachebust-004]
+  Given
+    - a src folder with a markdown file referencing a css file
+    - the css file @imports other css files, with subfolders
+  When
+    - we build
+  Then
+    - all @imports in the first css file have valid timestamps
+`.trim(), async() => {
+  // Given...
+  const tmpobj1 = tmp.dirSync();
+  const tmpobj2 = tmp.dirSync();
+  const path_src = tmpobj1.name;
+  const path_dest = tmpobj2.name;
+
+  const config = {
+    path_src: path_src,
+    path_dest: path_dest,
+  };
+
+  // Create the src style.css file with a reference to a second css file.
+  Util.touch(path.join(path_src, "css/style.css"));
+  const file_css = path.join(path_src, "css/style.css");
+  fs.writeFileSync(file_css, `
+// css
+@import "./second-no-sub.css";
+@import "./sub/third-with-sub.css";
+@import "./sub/deep/fourth-with-deep-sub.css";
+`, "utf8");
+  Util.touch(path.join(path_src, "css/second-no-sub.css"));
+  Util.touch(path.join(path_src, "css/sub/third-with-sub.css"));
+  Util.touch(path.join(path_src, "css/sub/deep/fourth-with-deep-sub.css"));
+
+  createMarkdownFile(path_src, "myfile.md", `<link rel="stylesheet" type="text/css" href="style.css">`);
+
+  const punyBlog = new PunyBlog(config);
+
+  // When...
+  const result = punyBlog.build();
+
+  // Then...
+  expect(result).toEqual(true);
+  expect(fs.existsSync(path.join(path_dest, "css/style.css"))).toEqual(true);
+  expect(fs.existsSync(path.join(path_dest, "css/second-no-sub.css"))).toEqual(true);
+  expect(fs.existsSync(path.join(path_dest, "css/sub/third-with-sub.css"))).toEqual(true);
+  expect(fs.existsSync(path.join(path_dest, "css/sub/deep/fourth-with-deep-sub.css"))).toEqual(true);
+
+  // ... confirm the css files referenced in the @import rule inside the css
+  // file has a timestamp parameter indicating the file does exist.
+  const content = fs.readFileSync(path.join(path_dest, "css/style.css"), "utf8");
+
+  const regexes = [
+    new RegExp(/second-no-sub.css\?ts=[0-9]+"/i),
+    new RegExp(/third-with-sub.css\?ts=[0-9]+"/i),
+    new RegExp(/fourth-with-deep-sub.css\?ts=[0-9]+"/i),
+  ];
+  regexes.forEach(regex => {
+    const matches = content.match(regex);
+    expect(matches).not.toEqual(null);
+  });
+});
+
+test(
+  `[Cachebust-005]
+  Given
+    - a src folder with a markdown file referencing a css file in a subfolder
+    - the css file imports another css file via @import
+  When
+    - we build
+  Then
+    - the rendered first file referening the second css file should have a timestamp
+`.trim(), async() => {
+  // Given...
+  const tmpobj1 = tmp.dirSync();
+  const tmpobj2 = tmp.dirSync();
+  const path_src = tmpobj1.name;
+  const path_dest = tmpobj2.name;
+
+  const config = {
+    path_src: path_src,
+    path_dest: path_dest,
+  };
+
+  // Create the src style.css file with a reference to a second css file.
+  Util.touch(path.join(path_src, "css/style.css"));
+  const file_css = path.join(path_src, "css/style.css");
+  fs.writeFileSync(file_css, `
+// css
+@import "second.css"; 
+`, "utf8");
+
+  createMarkdownFile(path_src, "myfile.md", `<link rel="stylesheet" href="css/style.css">`);
+  Util.touch(path.join(path_src, "css/second.css"));
+
+  const punyBlog = new PunyBlog(config);
+
+  // When...
+  const result = punyBlog.build();
+
+  // Then...
+  expect(result).toEqual(true);
+  expect(fs.existsSync(path.join(path_dest, "css/style.css"))).toEqual(true);
+
+  // ... confirm the css file referenced in the @import rule inside the css
+  // file has a timestamp parameter indicating the file does exist.
+  const content = fs.readFileSync(path.join(path_dest, "css/style.css"), "utf8");
+  expect(content.trim()).not.toEqual("");
+  const regex = new RegExp(/second.css\?ts=[0-9]+"/i);
+  const matches = content.match(regex);
+  expect(matches).not.toEqual(null);
+});
 
 });
 

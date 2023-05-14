@@ -1,5 +1,9 @@
 # PunyBlog changelog
 
+  - v1.2.1 (2023-05-14)
+    - Bugfix: Fixes CSS cachebusting implementation bug
+      - If the referenced CSS file (from the html) was in a subfolder, timestamps weren't determined from existing files because the file wasn't found
+
   - v1.2.0 (2023-05-13)
     - Feature: Adds cachebusting to CSS `@import` rules inside CSS files
     - Maintenance: `npm audit fix` for dependabot warnings
