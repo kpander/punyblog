@@ -1,5 +1,8 @@
 # PunyBlog changelog
 
+  - v1.2.2 (2023-06-11)
+    - Maintenance: Rendering errors are easier to debug now, by identifying the markdown file that failed rendering
+
   - v1.2.1 (2023-05-14)
     - Bugfix: Fixes CSS cachebusting implementation bug
       - If the referenced CSS file (from the html) was in a subfolder, timestamps weren't determined from existing files because the file wasn't found
