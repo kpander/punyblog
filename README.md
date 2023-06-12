@@ -177,6 +177,44 @@ Note:
 Cachebusting is provided by the [Cachebust](https://github.com/kpander/cachebust) package.
 
 
+## FAQ
+
+### There are some markdown files in the `path_src` that I want to exclude. How do I tell PunyBlog to ignore them?
+
+**Requires PunyBlog v1.3.0 or later**
+
+You can provide an array of patterns to the `build()` method in a configuration object. Any path/filename that matches one of the patterns will be ignored. Patterns can be strings (which will be converted into a RegExp) or RegExp objects.
+
+For example, assume we have 3 markdown files in the source folder and there is one we want to ignore.
+
+```
+/path/to/src/render-this.md
+/path/to/src/folder/do-not-render-this.md
+/path/to/src/ignore-all-these/ignore-this.md
+```
+
+```js
+const PunyBlog = require("PunyBlog");
+
+const blog = new PunyBlog({
+  path_src: "/path/to/src",
+  path_dest: "/path/to/dest",
+  path_partials: [
+    "/path/to/partials",
+    "/path/to/more/partials",
+  ],
+});
+
+const build_config = {
+  markdown_exclude_regexes: [
+    new RegExp("do-not-render-this\.md"),
+    "ignore-all-these",
+  ],
+};
+blog.build(build_config);
+```
+
+
 ## Maintainers
 
   - Kendall Anderson (kpander@invisiblethreads.com)
