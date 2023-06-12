@@ -491,3 +491,98 @@ test(
 
 });
 
+describe("Markdown exclude regexes:", () => {
+
+test(
+  `[PunyBlog-Exclude-Regexes-001]
+  Given
+    - good paths
+    - 3 src markdown files
+    - 2 of them are excluded via configuration
+  When
+    - we build
+  Then
+    - only 1 file should be generated (the one that was not excluded)
+`.trim(), async() => {
+  // Given...
+  const tmpobj1 = tmp.dirSync();
+  const tmpobj2 = tmp.dirSync();
+  const path_src = tmpobj1.name;
+  const path_dest = tmpobj2.name;
+
+  createMarkdownFile(path_src, "myfile.md", "# a header\n\nsome content");
+  createMarkdownFile(path_src, "ignore1.md", "# a header\n\nsome content");
+  createMarkdownFile(path_src, "ignore2.md", "# a header\n\nsome content");
+  const keep_filename = path.join(path_dest, "myfile.html");
+  const ignore1_filename = path.join(path_dest, "ignore1.html");
+  const ignore2_filename = path.join(path_dest, "ignore2.html");
+
+  const config = {
+    path_src: path_src,
+    path_dest: path_dest,
+  };
+  const punyBlog = new PunyBlog(config);
+
+  // When...
+  const build_config = {
+    markdown_exclude_regexes: [
+      "ignore1",
+      "ignore2",
+    ],
+  };
+  const result = punyBlog.build(build_config);
+
+  // Then...
+  expect(result).toEqual(true);
+  expect(fs.existsSync(keep_filename)).toEqual(true);
+  expect(fs.existsSync(ignore1_filename)).toEqual(false);
+  expect(fs.existsSync(ignore2_filename)).toEqual(false);
+});
+
+test(
+  `[PunyBlog-Exclude-Regexes-002]
+  Given
+    - good paths, 3 src markdown files
+    - 2 of them are excluded via regex objects
+  When
+    - we build
+  Then
+    - only 1 file should be generated (the one that was not excluded)
+`.trim(), async() => {
+  // Given...
+  const tmpobj1 = tmp.dirSync();
+  const tmpobj2 = tmp.dirSync();
+  const path_src = tmpobj1.name;
+  const path_dest = tmpobj2.name;
+
+  createMarkdownFile(path_src, "myfile.md", "# a header\n\nsome content");
+  createMarkdownFile(path_src, "ignore1.md", "# a header\n\nsome content");
+  createMarkdownFile(path_src, "ignore2.md", "# a header\n\nsome content");
+  const keep_filename = path.join(path_dest, "myfile.html");
+  const ignore1_filename = path.join(path_dest, "ignore1.html");
+  const ignore2_filename = path.join(path_dest, "ignore2.html");
+
+  const config = {
+    path_src: path_src,
+    path_dest: path_dest,
+  };
+  const punyBlog = new PunyBlog(config);
+
+  // When...
+  const build_config = {
+    markdown_exclude_regexes: [
+      new RegExp("ignore1", "i"),
+      new RegExp("ignore2\.md"),
+    ],
+  };
+  const result = punyBlog.build(build_config);
+
+  // Then...
+  expect(result).toEqual(true);
+  expect(fs.existsSync(keep_filename)).toEqual(true);
+  expect(fs.existsSync(ignore1_filename)).toEqual(false);
+  expect(fs.existsSync(ignore2_filename)).toEqual(false);
+});
+
+});
+

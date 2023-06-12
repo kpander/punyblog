@@ -1,5 +1,9 @@
 # PunyBlog changelog
 
+  - v1.3.0 (2023-06-11 @todo)
+    - Feature: Adds ability to exclude markdown files/folders from the build process
+      - See [Github issue](https://github.com/kpander/punyblog/issues/11)
+
   - v1.2.2 (2023-06-11)
     - Maintenance: Rendering errors are easier to debug now, by identifying the markdown file that failed rendering
 
