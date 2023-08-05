@@ -1,6 +1,9 @@
 # PunyBlog changelog
 
-  - v1.3.0 (2023-06-11 @todo)
+  - v1.3.1 (2023-08-05)
+    - Maintenance: Updates cachebust package to incorporate bugfix
+
+  - v1.3.0 (2023-06-11)
     - Feature: Adds ability to exclude markdown files/folders from the build process
       - See [Github issue](https://github.com/kpander/punyblog/issues/11)
 
