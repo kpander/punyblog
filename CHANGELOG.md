@@ -1,5 +1,9 @@
 # PunyBlog changelog
 
+  - v1.3.2 (2023-08-05)
+    - Maintenance: Updates cachebust package to incorporate bugfix
+    - Maintenance: Updates depdendabot vulnerability
+
   - v1.3.1 (2023-08-05)
     - Maintenance: Updates cachebust package to incorporate bugfix
 
