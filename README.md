@@ -177,6 +177,14 @@ Note:
 Cachebusting is provided by the [Cachebust](https://github.com/kpander/cachebust) package.
 
 
+### Image sizes
+
+Local images referenced in markdown files will have their width and height attributes set in the HTML automatically (if the image can be read).
+
+Image sizes are provided by the [Imagedims-js](https://github.com/kpander/imagedims-js) package.
+
+
+
 ## FAQ
 
 ### There are some markdown files in the `path_src` that I want to exclude. How do I tell PunyBlog to ignore them?

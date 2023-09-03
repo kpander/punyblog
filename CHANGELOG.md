@@ -1,5 +1,8 @@
 # PunyBlog changelog
 
+  - v1.4.0 (2023-09-03)
+    - Feature: Automatically adds `<img>` `width` and `height` attributes, via imagedims-js package
+
   - v1.3.4 (2023-09-03)
     - Bugfix: Fixes incorrect base path passed to cachebust when updating markdown files
     - Maintenance: Updates cachebust package to exclude data URLs
