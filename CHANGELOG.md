@@ -1,5 +1,8 @@
 # PunyBlog changelog
 
+  - v.1.4.1 (2023-09-03)
+    - Maintenance: Updates imagedims-js package
+
   - v1.4.0 (2023-09-03)
     - Feature: Automatically adds `<img>` `width` and `height` attributes, via imagedims-js package
 
