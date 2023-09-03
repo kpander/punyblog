@@ -1,5 +1,9 @@
 # PunyBlog changelog
 
+  - v1.3.4 (2023-09-03)
+    - Bugfix: Fixes incorrect base path passed to cachebust when updating markdown files
+    - Maintenance: Updates cachebust package to exclude data URLs
+
   - v1.3.3 (2023-09-03)
     - Maintenance: Updates cachebust package to incorporate bugfix
 
