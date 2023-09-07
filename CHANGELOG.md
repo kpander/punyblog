@@ -1,5 +1,8 @@
 # PunyBlog changelog
 
+  - v1.4.3 (2023-09-07)
+    - Maintenance: Updates cachebust package
+
   - v1.4.2 (2023-09-04)
     - Maintenance: Updates imagedims-js package
 
