@@ -1,5 +1,10 @@
 # PunyBlog changelog
 
+  - v1.5.0 (2023-09-30)
+    - Feature: Allows nunjucks includes (`{% include "file" %}`) from the same path as the current markdown file being rendered
+      - This means you can now include markdown files from the same folder as the current markdown file
+      - See [Github issue](https://github.com/kpander/punyblog/issues/24)
+
   - v1.4.3 (2023-09-07)
     - Maintenance: Updates cachebust package
 
