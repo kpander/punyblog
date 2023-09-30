@@ -173,6 +173,48 @@ test(
     expect(fs.existsSync(filename)).toEqual(true);
   });
 });
+
+test(
+  `[PunyBlog-006]
+  Given
+    - a configuration option where the src path exists
+    - a configuration option where the dist path exists
+    - a src path with a markdown file
+    - a partial, referenced in a markdown file, that exists only in the same folder as a markdown file
+  When
+    - we build
+  Then
+    - we should receive true
+    - the rendered html should include the contents of the partial from the markdown file path
+`.trim(), async() => {
+  // Given...
+  const tmpobj1 = tmp.dirSync();
+  const tmpobj2 = tmp.dirSync();
+  const tmpobj3 = tmp.dirSync();
+  const path_src = tmpobj1.name;
+  const path_dest = tmpobj2.name;
+
+  createMarkdownFile(path_src, "index.md", `# my header {% include "my-partial.html" %}`);
+  createMarkdownFile(path_src, "my-partial.html", "THIS IS MY PARTIAL");
+
+  const expected_file = path.join(path_dest, "index.html");
+
+  const config = {
+    path_src: path_src,
+    path_dest: path_dest,
+  };
+  const punyBlog = new PunyBlog(config);
+
+  // When...
+  const result = punyBlog.build();
+
+  // Then...
+  expect(result).toEqual(true);
+  expect(fs.existsSync(expected_file)).toEqual(true);
+  const contents = fs.readFileSync(expected_file, "utf8");
+  expect(contents.indexOf("THIS IS MY PARTIAL")).not.toEqual(-1);
+});
+
 });
 
 describe("Static files:", () => {
