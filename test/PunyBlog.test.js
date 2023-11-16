@@ -287,6 +287,46 @@ test(
   expect(result2).toEqual(false);
 });
 
+test(
+  `[Static-003]
+  Given
+    - a src folder that has non-markdown/non-css files, also in subfolders
+  When
+    - we build
+  Then
+    - the non-markdown/non-css files should be copied to the dest folder
+    - the timestamps of the copied files should match the src files
+`.trim(), async() => {
+  // Given...
+  const tmpobj1 = tmp.dirSync();
+  const tmpobj2 = tmp.dirSync();
+  const path_src = tmpobj1.name;
+  const path_dest = tmpobj2.name;
+
+  const config = {
+    path_src: path_src,
+    path_dest: path_dest,
+  };
+
+  Util.touch(path.join(path_src, "file1.jpg"));
+  const newTimestamp = new Date("2023-01-01T00:00:00Z");
+  fs.utimesSync(path.join(path_src, "file1.jpg"), newTimestamp, newTimestamp);
+
+  const punyBlog = new PunyBlog(config);
+
+  // When...
+  const result = punyBlog.build();
+
+  // Then...
+  expect(result).toEqual(true);
+  expect(fs.existsSync(path.join(path_dest, "file1.jpg"))).toEqual(true);
+
+  const stats = fs.statSync(path.join(path_dest, "file1.jpg"));
+  expect(stats.mtime).toEqual(newTimestamp);
+});
+
+
+
 
 });
 
