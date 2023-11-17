@@ -668,3 +668,57 @@ test(
 
 });
 
+// ---
+
+describe("API usage:", () => {
+
+test(
+  `[PunyBlog-API-documents-001]
+  Given
+    - multiple src markdown files
+  When
+    - we build
+  Then
+    - we get frontmatter data inside each file
+`.trim(), async() => {
+  // Given...
+  const tmpobj1 = tmp.dirSync();
+  const tmpobj2 = tmp.dirSync();
+  const path_src = tmpobj1.name;
+  const path_dest = tmpobj2.name;
+
+  createMarkdownFile(path_src, "myfile1.md", `
+---
+title: "my title 1"
+var1: "var1 value"
+---
+
+# a header\n\nsome content
+`.trim());
+  createMarkdownFile(path_src, "myfile2.md", "# a header\n\nsome content");
+
+  const config = {
+    path_src: path_src,
+    path_dest: path_dest,
+  };
+  const punyBlog = new PunyBlog(config);
+
+  // When...
+  const documents = punyBlog.documents;
+
+  // Then...
+  expect(Object.keys(documents).length).toEqual(2);
+
+  const key1 = path.join(path_src, "myfile1.md");
+  expect(documents[key1].attributes.title).toEqual("my title 1");
+  expect(documents[key1].attributes.var1).toEqual("var1 value");
+  expect(documents[key1].body.length).toBeGreaterThan(0);
+
+  const key2 = path.join(path_src, "myfile2.md");
+  expect(documents[key2].attributes.title).toEqual(undefined);
+  expect(documents[key2].attributes.var1).toEqual(undefined);
+  expect(documents[key2].body.length).toBeGreaterThan(0);
+});
+
+});
+
