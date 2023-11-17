@@ -13,7 +13,7 @@ Take a source folder of markdown files and static assets:
 
   - render markdown into html
   - use templates for common page structures
-  - copy static assets to a dist folder
+  - copy static assets to a dist folder (and maintain their timestamps)
 
 The rendered destination folder is a self-contained static website.
 
@@ -221,6 +221,53 @@ const build_config = {
 };
 blog.build(build_config);
 ```
+
+
+### How can I see the frontmatter data for each markdown file that will be processed?
+
+**Requires PunyBlog v1.7.0 or later**
+
+```
+/path/to/src/render-this.md
+/path/to/src/folder/article2.md
+```
+
+Assume each of these files have frontmatter keys "key1" and "key2".
+
+```js
+const PunyBlog = require("PunyBlog");
+
+const blog = new PunyBlog({
+  path_src: "/path/to/src",
+  path_dest: "/path/to/dest",
+  path_partials: [
+    "/path/to/partials",
+    "/path/to/more/partials",
+  ],
+});
+
+console.log(blog.documents);
+```
+
+```json
+{
+  "/path/to/src/render-this.md": {
+    "attributes": {
+      "key1": "value1",
+      "key2": "value2"
+    },
+    "body": "The markdown content of render-this.md"
+  },
+  "/path/to/src/folder/article2.md": {
+    "attributes": {
+      "key1": "value1",
+      "key2": "value2"
+    },
+    "body": "The markdown content of article2.md"
+  }
+}
+```
+
 
 
 ## Maintainers

@@ -1,5 +1,9 @@
 # PunyBlog changelog
 
+  - v1.7.0 (2023-11-17)
+    - Feature: Adds public property `punyBlogInstance.documents` which returns an object with all markdown documents, their frontmatter, and contents
+      - See [Github issue](https://github.com/kpander/punyblog/issues/28)
+
   - v1.6.0 (2023-11-15)
     - Feature: When static files are copied, the timestamps are maintained
       - This means they remain the same as the source files instead of changing every time you do a build
