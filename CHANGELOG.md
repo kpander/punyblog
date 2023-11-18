@@ -1,5 +1,10 @@
 # PunyBlog changelog
 
+  - v1.8.0 (2023-11-18)
+    - Feature: Empty `<p></p>` tags are removed from the final HTML
+      - These are typically caused by Nunjucks comments/conditions/etc.
+      - See [Github issue](https://github.com/kpander/punyblog/issues/30)
+
   - v1.7.0 (2023-11-17)
     - Feature: Adds public property `punyBlogInstance.documents` which returns an object with all markdown documents, their frontmatter, and contents
       - See [Github issue](https://github.com/kpander/punyblog/issues/28)
