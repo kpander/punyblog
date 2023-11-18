@@ -304,4 +304,36 @@ test(
   expect(result).toEqual("my custom template");
 });
 
+test(
+  `[RenderHtml-clean-001]
+  Given
+    - a string with nunjucks comments and markdown markup
+  When
+    - we run render()
+  Then
+    - we should not have an empty <p></p> tag that wrapped the nunjucks comment
+`.trim(), async() => {
+  // Given...
+  const tmpobj = tmp.dirSync();
+  const config = {};
+  const renderHtml = new RenderHtml(config);
+
+  const markdown = `
+Line 1.
+
+{#
+this is a nunjucks comment
+#}
+
+Line 2.
+`.trim();
+
+  // When...
+  const result = renderHtml.toHtml(markdown).trim();
+  const search = "<p></p>";
+
+  // Then...
+  expect(result.indexOf(search)).toEqual(-1);
+});
+
 
