@@ -720,5 +720,83 @@ var1: "var1 value"
   expect(documents[key2].body.length).toBeGreaterThan(0);
 });
 
+test(
+  `[PunyBlog-API-template-vars-001]
+  Given
+    - multiple src markdown files
+    - build configuration with template variable key values
+    - a template that uses a custom variable key
+  When
+    - we build
+  Then
+    - the custom variable key value exists in the rendered output
+`.trim(), async() => {
+  // Given...
+  const tmpobj1 = tmp.dirSync();
+  const tmpobj2 = tmp.dirSync();
+  const path_src = tmpobj1.name;
+  const path_dest = tmpobj2.name;
+
+  createMarkdownFile(path_src, "myfile1.md", `
+first line
+{{ custom_var }}
+third line
+`.trim());
+
+  const config = {
+    path_src: path_src,
+    path_dest: path_dest,
+    template_vars: { custom_var: "second line" },
+  };
+  const punyBlog = new PunyBlog(config);
+
+  // When...
+  const result = punyBlog.build();
+
+  // Then...
+  expect(result).toEqual(true);
+  const contents = fs.readFileSync(path.join(path_dest, "myfile1.html"), "utf8");
+  expect(contents.indexOf("second line")).not.toEqual(-1);
+});
+
+test(
+  `[PunyBlog-API-template-vars-002]
+  Given
+    - multiple src markdown files
+    - build configuration with nested template variable key values
+    - a template that uses a nested custom variable key
+  When
+    - we build
+  Then
+    - the custom variable key value exists in the rendered output
+`.trim(), async() => {
+  // Given...
+  const tmpobj1 = tmp.dirSync();
+  const tmpobj2 = tmp.dirSync();
+  const path_src = tmpobj1.name;
+  const path_dest = tmpobj2.name;
+
+  createMarkdownFile(path_src, "myfile1.md", `
+first line
+{{ key1.key2.key3.value }}
+third line
+`.trim());
+
+  const config = {
+    path_src: path_src,
+    path_dest: path_dest,
+    template_vars: { key1: { key2: { key3: { value: "second line" } } } },
+  };
+  const punyBlog = new PunyBlog(config);
+
+  // When...
+  const result = punyBlog.build();
+
+  // Then...
+  expect(result).toEqual(true);
+  const contents = fs.readFileSync(path.join(path_dest, "myfile1.html"), "utf8");
+  expect(contents.indexOf("second line")).not.toEqual(-1);
+});
+
 });
 
