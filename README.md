@@ -163,6 +163,18 @@ const blog = new PunyBlog({
 blog.build();
 ```
 
+### Template variables
+
+By default, all frontmatter keys and values will be available as variables in the template.
+
+In addition, there are some dynamic variables that will be available in the template. Assume the current file being rendered is:
+  - `/articles/2022-05-01/index.md`
+
+The following template variables will be present:
+  - `{{ render.current.basename }}` - the basename of the current output file, e.g. "index.html"
+  - `{{ render.current.path }}` - the relative path to the current page, e.g. "articles/2022-05-01"
+
+
 ## Features
 
 ### Cachebusting

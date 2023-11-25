@@ -14,7 +14,7 @@ const tmp = require("tmp");
 const createMarkdownFile = function(path_for_file, basename, contents) {
   const filename = path.join(path_for_file, basename);
   if (!fs.existsSync(path_for_file)) {
-    fs.mkdirSync(path_for_file);
+    fs.mkdirSync(path_for_file, { recursive: true });
   }
   fs.writeFileSync(filename, contents, "utf8");
   return filename;
@@ -796,6 +796,63 @@ third line
   expect(result).toEqual(true);
   const contents = fs.readFileSync(path.join(path_dest, "myfile1.html"), "utf8");
   expect(contents.indexOf("second line")).not.toEqual(-1);
+});
+
+});
+
+// ---
+
+describe("Dynamic render vars:", () => {
+
+test(
+  `[PunyBlog-render-vars-001]
+  Given
+    - multiple src markdown files
+    - each one has a template variable for the basename and pathname
+  When
+    - we build
+  Then
+    - we see the expected basename and pathname variable values in the rendered text
+`.trim(), async() => {
+  // Given...
+  const tmpobj1 = tmp.dirSync();
+  const tmpobj2 = tmp.dirSync();
+  const path_src = tmpobj1.name;
+  const path_dest = tmpobj2.name;
+
+  createMarkdownFile(path_src, "myfile1.md", `
+line 1
+file1 basename: {{ render.current.basename }}
+file1 path: [{{ render.current.path }}]
+line 2
+`.trim());
+
+  createMarkdownFile(path.join(path_src, "p1/p2"), "myfile2.md", `
+line 1
+file2 basename: {{ render.current.basename }}
+file2 path: [{{ render.current.path }}]
+line 2
+`.trim());
+
+  const config = {
+    path_src: path_src,
+    path_dest: path_dest,
+  };
+  const punyBlog = new PunyBlog(config);
+
+  // When...
+  const result = punyBlog.build();
+
+  // Then...
+  expect(result).toEqual(true);
+
+  const contents1 = fs.readFileSync(path.join(path_dest, "myfile1.html"), "utf8");
+  expect(contents1.indexOf("file1 basename: myfile1.html")).not.toEqual(-1);
+  expect(contents1.indexOf("file1 path: []")).not.toEqual(-1);
+
+  const contents2 = fs.readFileSync(path.join(path_dest, "p1/p2/myfile2.html"), "utf8");
+  expect(contents2.indexOf("file2 basename: myfile2.html")).not.toEqual(-1);
+  expect(contents2.indexOf("file2 path: [p1/p2]")).not.toEqual(-1);
 });
 
 });
