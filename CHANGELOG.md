@@ -1,5 +1,12 @@
 # PunyBlog changelog
 
+  - v1.9.0 (2023-11-24)
+    - Feature: Adds template variables for current file being rendered
+      - `{{ render.current.basename }}` - the current base HTML file (e.g., index.html)
+      - `{{ render.current.path }}` - the relative path to the current base HTML file (e.g., path/to)
+    - Maintenance: Updates README to include API documentation
+    - Maintenance: Adds test cases for `template_vars` config option
+
   - v1.8.0 (2023-11-18)
     - Feature: Empty `<p></p>` tags are removed from the final HTML
       - These are typically caused by Nunjucks comments/conditions/etc.

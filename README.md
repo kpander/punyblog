@@ -163,6 +163,18 @@ const blog = new PunyBlog({
 blog.build();
 ```
 
+### Template variables
+
+By default, all frontmatter keys and values will be available as variables in the template.
+
+In addition, there are some dynamic variables that will be available in the template. Assume the current file being rendered is:
+  - `/articles/2022-05-01/index.md`
+
+The following template variables will be present:
+  - `{{ render.current.basename }}` - the basename of the current output file, e.g. "index.html"
+  - `{{ render.current.path }}` - the relative path to the current page, e.g. "articles/2022-05-01"
+
+
 ## Features
 
 ### Cachebusting
@@ -267,6 +279,74 @@ console.log(blog.documents);
   }
 }
 ```
+
+
+## API
+
+### Methods
+
+#### `<object> constructor(config = {})`
+
+Create a new PunyBlog object.
+
+**Parameters**
+  - config (object) - configuration options for the blog
+
+| Key             | Type    | Req?  | Example               | Description |
+| :-              | :-      | :-    | :-                    | :-          |
+| `path_src`      | string  | yes   | `"/path/to/src"`      | The path to the source folder |
+| `path_dest`     | string  | yes   | `"/path/to/dest"`     | The path to the output/destination folder |
+| `path_partials` | array   | no    | `["/path/to/partials", "/path/to/more/partials"]` | An array of paths to folders containing partial templates |
+| `template_vars` | object  | no    | `{ "key1": "value1", "key2": "value2" }` | An object containing key/value pairs that will be available in all templates. This example would make `{{ key1 }}` and `{{ key2 }}` available in the templates. Nested objects are valid. |
+
+**Returns**
+  - (object) - a new PunyBlog object
+
+
+#### `<bool> build(build_config = {})`
+
+Generate the blog files in the destination path.
+
+**Parameters**
+  - build_config (object) - configuration options for the build
+
+| Key                         | Type  | Req?  | Example                               | Description |
+| :-                          | :-    | :-    | :-                                    | :-          |
+| `markdown_exclude_regexes`  | array | no    | `[ new RegExp("exclude"), "ignore" ]` | Array of regexes which, if matched against the markdown filename, will cause the markdown file to be ignored |
+
+**Returns**
+  - (boolean) - true if the build was successful, false otherwise
+
+
+### Properties
+
+#### `<array> markdownFiles`
+
+Return an array of all markdown files found in the source path.
+
+**Returns**
+  - (array) - array of strings, each string is a path to a markdown file
+
+
+#### `<array> nonMarkdownFiles`
+
+Return an array of all non-markdown files found in the source path.
+
+**Returns**
+  - (array) - array of strings, each string is a path to a non-markdown file
+
+
+#### `<object> documents`
+
+Return a json object with all the documents in the source path. Frontmatter for each should be the value for each file.
+
+**Returns**
+  - (object) - key/value pairs of filename and data
+
+Data is an object with keys:
+  - attributes: the frontmatter data as an object, with key/value pairs
+  - body: the string text body of the article
+
 
 
 
