@@ -336,4 +336,35 @@ Line 2.
   expect(result.indexOf(search)).toEqual(-1);
 });
 
+test(
+  `[RenderHtml-entity-001]
+  Given
+    - a string with a nunjucks macro definition, and call
+  When
+    - we run render()
+  Then
+    - the macro should work as expected
+`.trim(), async() => {
+  // Given...
+  const renderHtml = new RenderHtml({});
+
+  const markdown = `
+{% macro myfunc(myvar) %}
+<h3>{{ myvar }}</h3>
+{% endmacro %}
+
+{{ myfunc("my test string") }}
+
+test
+
+`.trim();
+
+  // When...
+  const result = renderHtml.toHtml(markdown).trim();
+  const search = "<h3>my test string</h3>";
+
+  // Then...
+  expect(result.indexOf(search)).not.toEqual(-1);
+});
+
 

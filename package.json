@@ -1,7 +1,7 @@
 {
   "name": "@kpander/punyblog",
   "description": "Render markdown files into a static website",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "homepage": "https://github.com/kpander/punyblog",
   "author": {
     "name": "Kendall Anderson",
