@@ -1,5 +1,10 @@
 # PunyBlog changelog
 
+  - v1.9.1 (2023-12-15)
+    - Bugfix: Fixes nunjucks variable and macro calls, when they include quotes
+      - Nunjucks macro calls (e.g., `mymacro("somevalue")`) were breaking, because quotes were replaced with entities
+      - Telling the markdown renderer to not escape quotes doesn't seem to address this, which is why (at this time) this hacky fix is in place
+
   - v1.9.0 (2023-11-24)
     - Feature: Adds template variables for current file being rendered
       - `{{ render.current.basename }}` - the current base HTML file (e.g., index.html)
